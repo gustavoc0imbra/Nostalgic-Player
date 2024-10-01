@@ -41,9 +41,7 @@ file.addEventListener("change", (event) => {
     audio1.src = URL.createObjectURL(files[0]);
     audio1.load();
     audio1.play();
-
     
-
     analyzer = audioCtx.createAnalyser();
     audioSrc.connect(analyzer);
     analyzer.connect(audioCtx.destination);
@@ -69,20 +67,12 @@ file.addEventListener("change", (event) => {
 function drawVisualizer(bufferLength, x, barWidth, barHeight, dataArray) {
     for (let i = 0; i < bufferLength; i++) {
         barHeight = dataArray[i] * 2;
-        ctx.save();
-        ctx.translate(canvas.width / 2, canvas.height / 2);
-        ctx.rotate(i * Math.PI * 5 / bufferLength);
         /* para colocar esquema cor rgb */
-        /* const red = i * barHeight / 15;
+        const red = i * barHeight / 15;
         const green = i * 2;
-        const blue = barHeight / 4; */
-        const hue = i * 6;
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0,0,barWidth, 20);
-        /* ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`; */
-        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-        ctx.fillRect(0, 0, barWidth, barHeight);
+        const blue = barHeight / 4;
+        ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
         x += barWidth;
-        ctx.restore();
     }
 }

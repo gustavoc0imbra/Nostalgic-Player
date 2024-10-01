@@ -5,6 +5,7 @@ import imgEfeitoCircular2 from "@/assets/EfeitoCircular2.png";
 import imgEfeitoBolha from "@/assets/EfeitoBolhas.png";
 import imgEfeitoNeon from "@/assets/EfeitoNeon.png";
 import imgEfeitoNeon2 from "@/assets/EfeitoNeon2.png";
+import imgEfeitoRetas from "@/assets/EfeitoRetas.png";
 import Infinity from "../Players/Infinity.vue";
 import Neon from "../Players/Neon.vue";
 import Infinity2 from "../Players/Infinity2.vue";
@@ -57,6 +58,13 @@ export default {
                     imagePath: imgEfeitoNeon2,
                     selected: false,
                     link: '/TestesJSEfeito6 - Neon 2/index.html'
+                },
+                {
+                    id: 7,
+                    name: 'Efeito Retas',
+                    imagePath: imgEfeitoRetas,
+                    selected: false,
+                    link: '/TestesJS-Retas/index.html'
                 },
             ],
             file: {
