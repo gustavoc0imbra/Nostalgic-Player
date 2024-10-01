@@ -24,7 +24,7 @@
         this.analyzer = this.audioCtx.createAnalyser();
         this.audioSrc.connect(this.analyzer);
         this.analyzer.connect(this.audioCtx.destination);
-        this.analyzer.fftSize = 512;
+        this.analyzer.fftSize = 128;
         const bufferLength = this.analyzer.frequencyBinCount;
         this.dataArray = new Uint8Array(bufferLength);
         this.barWidth = this.canvas.width / bufferLength;
@@ -50,18 +50,25 @@
         const bufferLength = this.dataArray.length;
   
         for (let i = 0; i < bufferLength; i++) {
-          const barHeight = this.dataArray[i] * 1.5;
-          this.ctx.save();
-          this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
-          this.ctx.rotate(i * 5.421);
-          this.hue = this.hueRange + i * 0.09;
-          this.ctx.fillStyle = `hsl(${this.hue}, 100%, ${barHeight/5}%)`;
-          this.ctx.beginPath();
-          this.ctx.arc(0, barHeight / 2, barHeight / 2, 0, Math.PI / 2);
-          this.ctx.fill();
-          this.ctx.stroke();
-          x += this.barWidth;
-          this.ctx.restore();
+            const barHeight = this.dataArray[i] * 2;
+            this.ctx.save();
+            this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+            this.ctx.rotate(i * 3.2);
+            this.hue = i * 0.1;
+            this.ctx.strokeStyle = `hsl(${this.hue}, 100%, ${barHeight/5}%)`;
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, 0);
+            this.ctx.lineTo(0, barHeight);
+            this.ctx.stroke();
+            x += this.barWidth;
+
+            if(i > bufferLength * 0.6) {
+                this.ctx.beginPath();
+                this.ctx.arc(0, 0, barHeight/1.5, 0, Math.PI * 2);
+                this.ctx.stroke();
+            }
+
+            this.ctx.restore();
         }
       }
     },
@@ -70,6 +77,8 @@
       this.canvas.width = window.innerWidth;
       this.canvas.height = window.innerHeight;
       this.ctx = this.canvas.getContext('2d');
+      this.ctx.lineWidth = 3;
+      this.ctx.globalCompositeOperation = "difference";
       this.startVisualization();
     },
     unmounted() {
@@ -77,11 +86,10 @@
         this.audioSrc.disconnect();
         this.audioCtx.close();
       }
-      
     }
   };
 </script>
 <template>
-    <canvas class="w-full h-full rounded-md bg-black transition ease-in-out duration-700 hover:opacity-10 hover:cursor-pointer" ref="canvasInfinity" id="canvas1"></canvas>
+    <canvas class="w-full h-full rounded-md bg-black transition ease-in-out duration-700 hover:cursor-pointer" ref="canvasInfinity" id="canvas1"></canvas>
 </template>
   

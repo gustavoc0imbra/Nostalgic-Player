@@ -84,7 +84,10 @@
       this.startVisualization();
     },
     unmounted() {
-        console.log('descarregou')
+      if(this.audioSrc && this.audioCtx) {
+        this.audioSrc.disconnect();
+        this.audioCtx.close();
+      }
     }
   };
 </script>

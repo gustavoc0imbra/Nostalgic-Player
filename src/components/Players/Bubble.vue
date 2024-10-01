@@ -24,10 +24,10 @@
         this.analyzer = this.audioCtx.createAnalyser();
         this.audioSrc.connect(this.analyzer);
         this.analyzer.connect(this.audioCtx.destination);
-        this.analyzer.fftSize = 512;
+        this.analyzer.fftSize = 128;
         const bufferLength = this.analyzer.frequencyBinCount;
         this.dataArray = new Uint8Array(bufferLength);
-        this.barWidth = this.canvas.width / bufferLength;
+        this.barWidth = 15;
 
         this.animate();
       },
@@ -50,18 +50,24 @@
         const bufferLength = this.dataArray.length;
   
         for (let i = 0; i < bufferLength; i++) {
-          const barHeight = this.dataArray[i] * 1.5;
-          this.ctx.save();
-          this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
-          this.ctx.rotate(i * 5.421);
-          this.hue = this.hueRange + i * 0.09;
-          this.ctx.fillStyle = `hsl(${this.hue}, 100%, ${barHeight/5}%)`;
-          this.ctx.beginPath();
-          this.ctx.arc(0, barHeight / 2, barHeight / 2, 0, Math.PI / 2);
-          this.ctx.fill();
-          this.ctx.stroke();
-          x += this.barWidth;
-          this.ctx.restore();
+            const barHeight = this.dataArray[i] * 1.4;
+            this.ctx.save();
+            this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+            this.ctx.rotate(i * this.bufferLength * 4);
+            /* para colocar esquema cor rgb */
+            /* const red = i * barHeight / 15;
+            const green = i * 2;
+            const blue = barHeight / 4; */
+            this.hue = 250 + i * 2;
+            this.ctx.fillStyle = `hsl(${this.hue}, 100%, 50%)`;
+            this.ctx.beginPath();
+            this.ctx.arc(0, barHeight, barHeight/10, 0, Math.PI * 2);
+            this.ctx.arc(0, barHeight/1.5, barHeight/10, 0, Math.PI * 2);
+            this.ctx.arc(0, barHeight/2, barHeight/10, 0, Math.PI * 2);
+            this.ctx.arc(0, barHeight/3, barHeight/10, 0, Math.PI * 2);
+            this.ctx.fill();
+            x += this.barWidth;
+            this.ctx.restore();
         }
       }
     },
@@ -70,6 +76,12 @@
       this.canvas.width = window.innerWidth;
       this.canvas.height = window.innerHeight;
       this.ctx = this.canvas.getContext('2d');
+      this.ctx.lineCap = "round";
+      this.ctx.shadowOffsetX = 0;
+      this.ctx.shadowOffsetY = 0;
+      this.ctx.shadowBlur = 20;
+      this.ctx.shadowColor = "DeepPink";
+      this.ctx.globalCompositeOperation = "xor";
       this.startVisualization();
     },
     unmounted() {
@@ -77,7 +89,6 @@
         this.audioSrc.disconnect();
         this.audioCtx.close();
       }
-      
     }
   };
 </script>
