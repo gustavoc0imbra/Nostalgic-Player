@@ -7,7 +7,6 @@
     ],
     data() {
       return {
-        audioCtx: null,
         analyzer: null,
         audioSrc: null,
         canvas: null,
@@ -21,12 +20,14 @@
     },
     methods: {
       startVisualization() {
-        this.audioElement = this.$parent.$refs.audioSrcProp;
-        this.audioCtx = this.$props.audioContext;
-        this.audioSrc = this.audioSrc = this.$props.audioSrcProp;;
-        this.analyzer = this.audioCtx.createAnalyser();
+        console.log(this.$props)
+        this.audioElement = new Audio(this.$props.audioSrcLink);
+        this.audioElement.load();
+        this.audioElement.play();
+        this.audioSrc = this.$props.audioContext.createMediaElementSource(this.audioElement);
+        this.analyzer = this.$props.audioContext.createAnalyser();
         this.audioSrc.connect(this.analyzer);
-        this.analyzer.connect(this.audioCtx.destination);
+        this.analyzer.connect(this.$props.audioContext.destination);
         this.analyzer.fftSize = 2048;
         const bufferLength = this.analyzer.frequencyBinCount;
         this.dataArray = new Uint8Array(bufferLength);
@@ -69,19 +70,21 @@
       this.startVisualization();
     },
     unmounted() {
-      /* if(this.audioSrc && this.audioCtx) {
+      if(this.analyzer) {
+        this.analyzer.disconnect();
+        if (this.audioElement) {
+          this.audioElement.pause(); // Pausa o áudio
+          this.audioElement.src = ''; // Limpa o src
+          this.audioElement = null;
+        }
         this.audioSrc.disconnect();
-        this.audioCtx.close();
-        this.audioCtx = null;
         this.audioSrc = null;
-        this.analyzer = null;
-        this.audioElement = null;
-        this.dataArray = null;
-      } */
+        console.log('Audio Src', this.audioSrc);
+      }
     }
   };
 </script>
 <template>
-    <canvas class="w-full h-full rounded-md bg-black transition ease-in-out duration-700 hover:opacity-10 hover:cursor-pointer" ref="canvasInfinity" id="canvas1"></canvas>
+    <canvas class="w-full h-full rounded-md bg-black transition ease-in-out duration-700 hover:cursor-pointer" ref="canvasInfinity" id="canvas1"></canvas>
 </template>
   

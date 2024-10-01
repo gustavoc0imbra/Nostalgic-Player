@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Teste Audio</title>
+</head>
+<body>
+    <div id="container">
+        <canvas id="canvas1"></canvas>
+        <audio id="audio1" controls></audio>
+        <input type="file" id="fileupload" accept="audio/*" />
+        <input id="input-range" type="range" onchange="changeHueValue()" step="10" min="0" max="360">
+    </div>
+    
+    <script src="./script.js"></script>
+</body>
+</html>
